@@ -8,8 +8,8 @@
  */
 
 import React, {Component} from 'react';
-
 import {Platform, StyleSheet, Text, View} from 'react-native';
+import NavigationUtil from "../navigation/NavigationUtil"
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -19,13 +19,23 @@ const instructions = Platform.select({
 });
 
 type Props = {};
-export default class App extends Component<Props> {
+export default class WelcomePage extends Component<Props> {
+  componentDidMount(): void {
+    this.timer=setTimeout(() => {
+        NavigationUtil.resetToHomePage({
+            navigation:this.props.navigation
+        })
+    },200)
+  }
+
+  componentWillMount() {
+    this.timer && clearTimeout(this.timer);
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
+        <Text style={styles.welcome}>WelcomePage</Text>
       </View>
     );
   }
@@ -42,10 +52,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center',
     margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
+  }
+
 });
