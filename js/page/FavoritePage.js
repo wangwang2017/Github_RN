@@ -8,7 +8,9 @@
  */
 
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import {Button, Platform, StyleSheet, Text, View} from 'react-native';
+import {connect} from "react-redux";
+import actions from '../action/index'
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -18,11 +20,18 @@ const instructions = Platform.select({
 });
 
 type Props = {};
-export default class FavoritePage extends Component<Props> {
+class FavoritePage extends Component<Props> {
   render() {
+    const {navigation} = this.props;
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>FavoritePage</Text>
+          <Button
+              title='改变主题色'
+              onPress={ () => {
+                  this.props.onThemeChange('red')
+              }}
+          />
       </View>
     );
   }
@@ -42,3 +51,12 @@ const styles = StyleSheet.create({
   }
 
 });
+
+const mapStateToProps = state =>({
+});
+
+const mapDispatchToProps = dispatch => ({
+    onThemeChange: theme => dispatch(actions.onThemeChange(theme))
+});
+
+export default connect(mapStateToProps,mapDispatchToProps)(FavoritePage)
