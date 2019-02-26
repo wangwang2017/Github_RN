@@ -12,7 +12,7 @@ import {
   createBottomTabNavigator,
   createAppContainer
 } from "react-navigation";
-import NavigationUtil from '../navigation/NavigationUtil';
+import { DeviceInfo } from 'react-native';
 import {Platform, StyleSheet, Text, View} from 'react-native';
 import PopularPage from '../page/PopularPage';
 import TrendingPage from '../page/TrendingPage';

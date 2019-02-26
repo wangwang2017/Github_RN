@@ -12,11 +12,13 @@ import {
     createMaterialTopTabNavigator,
     createAppContainer
 } from "react-navigation";
-import {FlatList, Platform, StyleSheet, Text, View,RefreshControl,ActivityIndicator} from 'react-native';
+import {DeviceInfo,FlatList, Platform, StyleSheet, Text, View,RefreshControl,ActivityIndicator} from 'react-native';
 import {connect} from 'react-redux';
 import Toast from 'react-native-easy-toast';
 import PopularItem from '../common/PopularItem';
 import actions from '../action/index';
+import NavigationBar from '../common/NavigationBar';
+
 
 const instructions = Platform.select({
     ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -49,6 +51,16 @@ export default class PopularPage extends Component<Props> {
         return tabs;
     }
     render() {
+        let statusBar={
+            backgroundColor:'#678',
+            barStyle:'light-content'
+
+        }
+        let navigationBar = <NavigationBar
+            title={'最热'}
+            statusBar={statusBar}
+            style={{backgroundColor:'#678'}}
+        />
         const TabNavigator = createAppContainer(createMaterialTopTabNavigator(
             this._genTabs(),{
                 tabBarOptions:{
@@ -56,14 +68,16 @@ export default class PopularPage extends Component<Props> {
                     upperCaseLabel:false,//标签小写
                     scrollEnabled:true,//选项卡滚动
                     style:{
-                        backgroundColor: '#567'
+                        backgroundColor: '#567',
+                        height:30 //安卓适配 导航栏开启滑动效果初次加载时的闪烁效果
                     },
                     indicatorStyle:styles.indicatorStyle,//标签指示器样式
                     labelStyle:styles.labelStyle,
                 }
             }
         ));
-        return <View style={{flex: 1, marginTop: 1}}>
+        return <View style={{flex: 1,marginTop: DeviceInfo.isIPhoneX_deprecated ? 30 : 0}}>
+            {navigationBar}
             <TabNavigator/>
         </View>
 
@@ -139,14 +153,13 @@ class PopularTab extends Component<Props> {
     }
 
     render() {
-
-        let store = this._store;
+        let store = this._store();
         return (
             <View style={styles.container}>
                 <FlatList
                     data={store.projectModels}
                     renderItem={data => this.renderItem(data)}
-                    keyExtractor={item =>""+item.id}
+                    keyExtractor={item =>"" +item.id}
                     refreshControl={
                         <RefreshControl
                             title={'Loading'}
@@ -216,8 +229,7 @@ const styles = StyleSheet.create({
     },
     labelStyle:{
         fontSize:13,
-        marginTop: 6,
-        marginBottom:6
+        margin:0,
     },
     ActivityIndicatorStyle:{
         color:'red',

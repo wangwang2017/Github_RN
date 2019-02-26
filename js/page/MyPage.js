@@ -8,8 +8,11 @@
  */
 
 import React, {Component} from 'react';
-import {Button, Platform, StyleSheet, Text, View} from 'react-native';
+import {Button, Platform, StyleSheet, Text, View,TouchableOpacity} from 'react-native';
 import NavigationUtil from "../navigation/NavigationUtil";
+import NavigationBar from "../common/NavigationBar";
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import Feather from 'react-native-vector-icons/Feather';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -17,14 +20,64 @@ const instructions = Platform.select({
     'Double tap R on your keyboard to reload,\n' +
     'Shake or press menu button for dev menu',
 });
+const THEME_COLOR ='#678';
 
 type Props = {};
 export default class MyPage extends Component<Props> {
+
+    getRightButton(){
+        return<View style={{flexDirection:'row'}}>
+            <TouchableOpacity
+                onPress={()=>{
+
+                }}
+            >
+                <View style={{padding:5,marginLeft:8}}>
+                    <Feather
+                        name={'search'}
+                        size={24}
+                        style={{color:'white'}}
+                    />
+                </View>
+            </TouchableOpacity>
+        </View>
+    }
+
+    getLeftButton(callBack){
+        return<View style={{padding:8,paddingLeft:12}}>
+            <TouchableOpacity
+                onPress={callBack}
+            >
+                <Ionicons
+                    name={'ios-arrow-back'}
+                    size={26}
+                    style={{color:'white'}}
+                />
+            </TouchableOpacity>
+        </View>
+    }
+
+
   render() {
+    let statusBar = {
+        backgroundColor:THEME_COLOR,
+        barStyle:'light-content',
+    };
+    let navigationBar =
+        <NavigationBar
+            title={'我的'}
+            statusBar={statusBar}
+            style={{backgroundColor:THEME_COLOR}}
+            rightButton={this.getRightButton()}
+            leftButton={this.getLeftButton()}
+        />;
+
     const {navigation} = this.props;
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>MyPage</Text>
+          {navigationBar}
+
+          <View style={styles.content}>
         <Button
             title='改变主题色'
             onPress={ () => {
@@ -77,6 +130,7 @@ export default class MyPage extends Component<Props> {
                   }}
               />
           </View>
+          </View>
       </View>
     );
   }
@@ -85,9 +139,6 @@ export default class MyPage extends Component<Props> {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
   },
     welcome:{
         fontSize: 26,
@@ -105,6 +156,12 @@ const styles = StyleSheet.create({
         fontSize:13,
         marginTop: 6,
         marginBottom:6
-    }
+    },
+    content: {
+       flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop:20,
+    },
 
 });

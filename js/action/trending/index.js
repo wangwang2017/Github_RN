@@ -8,13 +8,13 @@ import {handleData} from '../ActionUtil'
  * @param pageSize
  * @returns {Function}
  */
-export function onRefreshPopular(storeName,url,pageSize){
+export function onRefreshTrending(storeName,url,pageSize){
     return dispatch =>{
-        dispatch({type:Types.POPULAR_REFRESH,storeName});
+        dispatch({type:Types.TRENDING_REFRESH,storeName});
         let dataStore = new DataStore();
-        dataStore.fetchData(url,FLAG_STORAGE.flag_popular)
+        dataStore.fetchData(url,FLAG_STORAGE.flag_trending)
             .then(data =>{
-                handleData(Types.POPULAR_REFRESH_SUCCESS,dispatch,storeName,data,pageSize)
+                handleData(Types.TRENDING_REFRESH_SUCCESS,dispatch,storeName,data,pageSize)
             })
             .catch(error =>{
                 console.log(error)
@@ -35,7 +35,7 @@ export function onRefreshPopular(storeName,url,pageSize){
  * @param dataArray 原始数据
  * @param callback 回调函数，可以通过回调函数来向调用页面通信：比如异常信息展示，没有更多等待
  */
-export function onLoadMorePopular(storeName,pageIndex,pageSize,dataArray = [], callback){
+export function onLoadMoreTrending(storeName,pageIndex,pageSize,dataArray = [], callback){
     return dispatch =>{
         setTimeout(() => {
             if ((pageIndex - 1) * pageSize >= dataArray.length) {
@@ -43,7 +43,7 @@ export function onLoadMorePopular(storeName,pageIndex,pageSize,dataArray = [], c
                     callback('no more')
                 }
                 dispatch({
-                    type: Types.POPULAR_LOAD_MORE_FAIL,
+                    type: Types.TRENDING_LOAD_MORE_FAIL,
                     error: 'no more',
                     storeName: storeName,
                     pageIndex: --pageIndex,
@@ -52,7 +52,7 @@ export function onLoadMorePopular(storeName,pageIndex,pageSize,dataArray = [], c
             }else{
                 let max = pageSize * pageIndex > dataArray.length ? dataArray.length : pageSize * pageIndex;
                 dispatch({
-                    type:Types.POPULAR_LOAD_MORE_SUCCESS,
+                    type:Types.TRENDING_LOAD_MORE_SUCCESS,
                     storeName,
                     pageIndex,
                     projectModels:dataArray.slice(0, max),
