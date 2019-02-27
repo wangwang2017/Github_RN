@@ -1,6 +1,6 @@
 import Types from '../types';
 import DataStore, {FLAG_STORAGE} from '../../expand/dao/DataStore';
-import {handleData} from '../ActionUtil'
+import {_projectModels, handleData} from '../ActionUtil'
 /**
  *
  * @param storeName
@@ -8,7 +8,7 @@ import {handleData} from '../ActionUtil'
  * @param pageSize
  * @returns {Function}
  */
-export function onRefreshPopular(storeName,url,pageSize){
+export function onRefreshPopular(storeName,url,pageSize,favoriteDao ){
     return dispatch =>{
         dispatch({type:Types.POPULAR_REFRESH,storeName});
         let dataStore = new DataStore();
@@ -35,7 +35,7 @@ export function onRefreshPopular(storeName,url,pageSize){
  * @param dataArray 原始数据
  * @param callback 回调函数，可以通过回调函数来向调用页面通信：比如异常信息展示，没有更多等待
  */
-export function onLoadMorePopular(storeName,pageIndex,pageSize,dataArray = [], callback){
+export function onLoadMorePopular(storeName,pageIndex,pageSize,dataArray = [], callback,favoriteDao){
     return dispatch =>{
         setTimeout(() => {
             if ((pageIndex - 1) * pageSize >= dataArray.length) {
@@ -51,12 +51,15 @@ export function onLoadMorePopular(storeName,pageIndex,pageSize,dataArray = [], c
                 })
             }else{
                 let max = pageSize * pageIndex > dataArray.length ? dataArray.length : pageSize * pageIndex;
-                dispatch({
-                    type:Types.POPULAR_LOAD_MORE_SUCCESS,
-                    storeName,
-                    pageIndex,
-                    projectModels:dataArray.slice(0, max),
+                _projectModels(dataArray.slice(0,max),favoriteDao,data=>{
+                    dispatch({
+                        type:Types.POPULAR_LOAD_MORE_SUCCESS,
+                        storeName,
+                        pageIndex,
+                        projectModels:data,
+                    })
                 })
+
             }
         },500);
     }

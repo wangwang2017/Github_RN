@@ -15,6 +15,7 @@ import DynamicTabNavigator from '../navigation/DynamicTabNavigator';
 import {Platform, StyleSheet, Text, View} from 'react-native';
 import actions from "../action";
 import {connect} from "react-redux";
+import BackPressComponent from "../common/BackPressComponent";
 
 
 const instructions = Platform.select({
@@ -27,12 +28,17 @@ const instructions = Platform.select({
 type Props = {};
 class HomePage extends Component<Props> {
 
+  constructor(props){
+    super(props);
+    this.backPress = new BackPressComponent({backPress:this.onBackPress()});
+  }
+
   componentDidMount(): void {
-      BackHandler.addEventListener("hardwareBackPress",this.onBackPress);
+      this.backPress.componentDidMount();
   }
 
   componentWillUnmount(): void {
-      BackHandler.removeEventListener("hardwareBackPress",this.onBackPress);
+      this.backPress.componentWillUnmount();
   }
 
   /**
