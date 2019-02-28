@@ -74,6 +74,14 @@ export default function onAction(state= defaultState, action) {
                     pageIndex:action.pageIndex,
                 }
             };
+        case Types.POPULAR_FLUSH_FAVORITE:
+            return {
+                ...state,//延展操作符也可以使用Object.assign
+                [action.storeName]:{
+                    ...state[action.storeName],
+                    projectModels:action.projectModels,
+                }
+            };
         default:
             return state;
     }

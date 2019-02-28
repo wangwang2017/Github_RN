@@ -24,6 +24,12 @@ export default class BaseItem extends Component {
         })
     }
 
+    onItemClick(){
+        this.props.onSelect(isFavorite => {
+            this.setFavoriteState(isFavorite);
+        })
+    }
+
     /**
      * 牢记：https://github.com/reactjs/rfcs/blob/master/text/0006-static-lifecycle-methods.md
      * componentWillReceiveProps在新版React中不能再用了
@@ -59,5 +65,4 @@ export default class BaseItem extends Component {
                 />
             </TouchableOpacity>
         }
-
 }

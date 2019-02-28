@@ -1,6 +1,5 @@
 import React,{Component} from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import BaseItem from "./BaseItem";
 
 export default class PopularItem extends BaseItem {
@@ -11,7 +10,7 @@ export default class PopularItem extends BaseItem {
 
         return (
             <TouchableOpacity
-                onPress={this.props.onSelect}
+                onPress={() => this.onItemClick()}
             >
                 <View style={styles.cell_container}>
                     <Text style={styles.title}>
