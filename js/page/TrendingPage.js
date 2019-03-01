@@ -107,7 +107,6 @@ export default class TrendingPage extends Component<Props> {
             ));
         }
         return this.tabNav;
-
     }
 
   render() {

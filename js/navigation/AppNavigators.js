@@ -4,13 +4,13 @@ import {
     createAppContainer
 } from 'react-navigation';
 import WelcomePage from '../page/WelcomePage';
-import FetchDemoPage from '../page/FetchDemoPage';
 import HomePage from '../page/HomePage';
 import DetailPage from '../page/DetailPage';
-import AsyncStorageDemoPage from '../page/AsyncStorageDemoPage';
 import DataStoreDemoPage from '../page/DataStoreDemoPage';
+import WebviewPage from '../page/WebviewPage';
 import {connect} from 'react-redux';
 import {createReactNavigationReduxMiddleware, createReduxContainer} from 'react-navigation-redux-helpers';
+import AboutPage from "../page/about/AboutPage";
 
 export const rootCom = 'Init';//设置根路由
 
@@ -18,7 +18,7 @@ const InitNavigator = createStackNavigator({
    WelcomePage:{
        screen:WelcomePage,
        navigationOptions:{
-           header:null, //可以通过将header设为null，来禁用StackNavigator的Navigation
+           header:null, //可以通过将header设为null，来禁用StackNavigator的Navigation 隐藏title
        }
    }
 });
@@ -36,28 +36,28 @@ const MainNavigator = createStackNavigator({
             header:null,
         }
     },
-    FetchDemoPage:{
-        screen:FetchDemoPage,
-        navigationOptions:{
-            header:null,
-        }
-    },
-    AsyncStorageDemoPage:{
-        screen:AsyncStorageDemoPage,
-        navigationOptions:{
-            header:null,
-        }
-    },
     DataStoreDemoPage:{
         screen:DataStoreDemoPage,
         navigationOptions:{
             header:null,
         }
     },
+    WebviewPage:{
+        screen:WebviewPage,
+        navigationOptions:{
+            header:null,//可以通过将header设为null，来禁用StackNavigator的Navigation 隐藏title
+        }
+    },
+    AboutPage:{
+        screen:AboutPage,
+        navigationOptions:{
+            header:null,//可以通过将header设为null，来禁用StackNavigator的Navigation 隐藏title
+        }
+    },
 
 }, {
     defaultNavigationOptions: {
-        header: null,// 可以通过将header设为null 来禁用StackNavigator的Navigation Bar
+        header: null,// 可以通过将header设为null 来禁用StackNavigator的Navigation Bar 隐藏title
     }
 });
 

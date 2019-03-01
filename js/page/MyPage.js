@@ -8,11 +8,13 @@
  */
 
 import React, {Component} from 'react';
-import {Button, Platform, StyleSheet, Text, View,TouchableOpacity} from 'react-native';
+import {Platform, StyleSheet, Text, View,TouchableOpacity,ScrollView} from 'react-native';
 import NavigationUtil from "../navigation/NavigationUtil";
 import NavigationBar from "../common/NavigationBar";
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import Feather from 'react-native-vector-icons/Feather';
+import {MORE_MENU} from "../common/More_Menu";
+import GlobalStyles from "../res/styles/GlobalStyles";
+import ViewUtil from "../util/ViewUtil";
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -25,38 +27,28 @@ const THEME_COLOR ='#678';
 type Props = {};
 export default class MyPage extends Component<Props> {
 
-    getRightButton(){
-        return<View style={{flexDirection:'row'}}>
-            <TouchableOpacity
-                onPress={()=>{
 
-                }}
-            >
-                <View style={{padding:5,marginLeft:8}}>
-                    <Feather
-                        name={'search'}
-                        size={24}
-                        style={{color:'white'}}
-                    />
-                </View>
-            </TouchableOpacity>
-        </View>
+    onClick(menu){
+        let RouteName,params = {};
+        switch (menu) {
+            case MORE_MENU.Tutorial:
+                RouteName = 'WebviewPage';
+                params.title = '教程';
+                params.url = 'https://coding.m.imooc.com/classindex.html?cid=89';
+                break;
+            case MORE_MENU.About:
+                RouteName = 'AboutPage';
+                params.title = '关于';
+                break;
+        }
+        if (RouteName){
+            NavigationUtil.goPage(params,RouteName);
+        }
     }
 
-    getLeftButton(callBack){
-        return<View style={{padding:8,paddingLeft:12}}>
-            <TouchableOpacity
-                onPress={callBack}
-            >
-                <Ionicons
-                    name={'ios-arrow-back'}
-                    size={26}
-                    style={{color:'white'}}
-                />
-            </TouchableOpacity>
-        </View>
+    getItem(menu){
+        return ViewUtil.getMenuItem(() => this.onClick(menu),menu,THEME_COLOR);
     }
-
 
   render() {
     let statusBar = {
@@ -68,100 +60,86 @@ export default class MyPage extends Component<Props> {
             title={'我的'}
             statusBar={statusBar}
             style={{backgroundColor:THEME_COLOR}}
-            rightButton={this.getRightButton()}
-            leftButton={this.getLeftButton()}
         />;
 
     const {navigation} = this.props;
     return (
-      <View style={styles.container}>
+      <View style={GlobalStyles.root_container}>
           {navigationBar}
+          <ScrollView>
+              <TouchableOpacity
+                  style={styles.item}
+                  onPress={() => this.onClick(MORE_MENU.About)}
+              >
+                  <View style={styles.about_left}>
+                      <Ionicons
+                          name={MORE_MENU.About.icon}
+                          size={40}
+                          style={{
+                              marginRight: 10,
+                              color: THEME_COLOR,
+                          }}
+                      />
+                      <Text>GitHub Popular</Text>
+                  </View>
+                  <Ionicons
+                      name={'ios-arrow-forward'}
+                      size={16}
+                      style={{
+                          marginRight: 10,
+                          alignSelf: 'center',
+                          color: THEME_COLOR,
+                      }}/>
+              </TouchableOpacity>
+              <View style={GlobalStyles.line}/>
+              {this.getItem(MORE_MENU.Tutorial)}
 
-          <View style={styles.content}>
-        <Button
-            title='改变主题色'
-            onPress={ () => {
-              navigation.setParams({
-                theme:{
-                  tintColor: 'pink',
-                  updateTime: new Date().getTime()
-                }
-              })
-            }}
-        />
-          <Text
-              style={{marginTop:10}}
-              onPress={() => {
-                  NavigationUtil.goPage({
-                      navigation: this.props.navigation
-                  }, "DetailPage")
-              }}>跳转到详情页</Text>
+              <Text style={styles.groupTitle}>趋势管理</Text>
+              {this.getItem(MORE_MENU.Custom_Language)}
+              <View style={GlobalStyles.line}/>
+              {this.getItem(MORE_MENU.Sort_Language)}
 
-          <View  style={{marginTop:20}}>
-              <Button
+              <Text style={styles.groupTitle}>最热管理</Text>
+              {this.getItem(MORE_MENU.Custom_Key)}
+              <View style={GlobalStyles.line}/>
+              {this.getItem(MORE_MENU.Sort_Key)}
+              <View style={GlobalStyles.line}/>
+              {this.getItem(MORE_MENU.Remove_Key)}
 
-                  title={'Fetch的使用'}
-                  onPress={() => {
-                      NavigationUtil.goPage({
-                          navigation: this.props.navigation
-                      }, "FetchDemoPage")
-                  }}
-              />
-          </View>
-          <View  style={{marginTop:20}}>
-              <Button
-                  style={{marginTop:20}}
-                  title={'缓存的使用'}
-                  onPress={() => {
-                      NavigationUtil.goPage({
-                          navigation: this.props.navigation
-                      }, "AsyncStorageDemoPage")
-                  }}
-              />
-          </View>
-          <View  style={{marginTop:20}}>
-              <Button
-                  style={{marginTop:20}}
-                  title={'离线缓存框架'}
-                  onPress={() => {
-                      NavigationUtil.goPage({
-                          navigation: this.props.navigation
-                      }, "DataStoreDemoPage")
-                  }}
-              />
-          </View>
-          </View>
+              <Text style={styles.groupTitle}>设置</Text>
+              {this.getItem(MORE_MENU.Custom_Theme)}
+              <View style={GlobalStyles.line}/>
+              {this.getItem(MORE_MENU.About_Author)}
+              <View style={GlobalStyles.line}/>
+              {this.getItem(MORE_MENU.Feedback)}
+          </ScrollView>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-    welcome:{
-        fontSize: 26,
-        justifyContent: 'center',
+    container: {
+        flex: 1,
+        marginTop:30
+    },
+    about_left: {
         alignItems: 'center',
+        flexDirection: 'row'
     },
-    tabStyle: {
-        minWidth:50
-    },
-    indicatorStyle:{
-        height:2,
-        backgroundColor:'white'
-    },
-    labelStyle:{
-        fontSize:13,
-        marginTop: 6,
-        marginBottom:6
-    },
-    content: {
-       flexDirection: 'column',
+    item: {
+        backgroundColor: 'white',
+        padding: 10,
+        height: 90,
         alignItems: 'center',
-        justifyContent: 'center',
-        marginTop:20,
+        justifyContent: 'space-between',
+        flexDirection: 'row'
     },
-
+    groupTitle: {
+        marginLeft: 10,
+        marginTop: 10,
+        marginBottom: 5,
+        fontSize: 12,
+        color: 'gray'
+    }
 });
